@@ -4,7 +4,7 @@
 
 ```console
 $ dotnet run
-Usage: trace2src [--all] <trace-file>
+Usage: trace2txt [--all] <trace-file>
 ```
 
 By default tries to dump sample profiler sample events. With `--all` instead dumps all events

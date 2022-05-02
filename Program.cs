@@ -13,7 +13,7 @@ public class Program
         Mode mode = Mode.DumpSamples;
         if (args.Length < 1)
         {
-            Console.Error.WriteLine("Usage: trace2src [--all] <trace-file>");
+            Console.Error.WriteLine("Usage: trace2txt [--all] <trace-file>");
             return 1;
         }
         string? fileName = null;
