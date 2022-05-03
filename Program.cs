@@ -41,6 +41,7 @@ public class Program
             Console.Error.WriteLine("WARNING: there were {0} lost events", t.EventsLost);
         }
 
+
         switch (mode) {
             case Mode.DumpAll:
                 SetupDumpAll(t);
@@ -56,15 +57,22 @@ public class Program
 
     public static void SetupDumpAll(EventPipeEventSource t)
     {
-        t.Dynamic.All += OnTraceEvent;
-        // t.AllEvents += OnAllEvent;
-    
+        t.Clr.All += OnTraceEvent;
+        t.AllEvents += OnTraceEvent;
+        Microsoft.Diagnostics.Tracing.Parsers.Clr.ClrRundownTraceEventParser clrRundownParser = new(t);
+        SampleProfilerTraceEventParser sampleProfilerParser = new(t);
+        clrRundownParser.All += OnTraceEvent;
+        sampleProfilerParser.All += OnTraceEvent;
+
     }
 
     public static void SetupDumpSamples(EventPipeEventSource t)
     {
         SampleProfilerTraceEventParser sampleProfilerParser = new(t);
+        Microsoft.Diagnostics.Tracing.Parsers.Clr.ClrRundownTraceEventParser clrRundownParser = new(t);
 
+        t.Clr.All += OnTraceEvent;
+        clrRundownParser.All += OnTraceEvent;
         sampleProfilerParser.ThreadSample += OnThreadSample;
         sampleProfilerParser.ThreadStackWalk += OnThreadStackWalk;
         t.UnhandledEvents += OnUnhandledEvent;
