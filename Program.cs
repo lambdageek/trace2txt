@@ -24,10 +24,12 @@ public class Filter {
         Console.WriteLine (evt.Dump());
     }
 
+#pragma warning disable CA1822 // method could be made static
     public void OnUnhandledEvent(TraceEvent evt)
     {
         Console.WriteLine("WARNING: unhandled event {0}", evt.Dump());
     }
+#pragma warning restore CA1822
 
     public void OnThreadSample(ClrThreadSampleTraceData data)
     {
@@ -106,6 +108,7 @@ public class Program
     public static void SetupDumpAll(EventPipeEventSource t, Filter filter)
     {
         t.Clr.All += filter.OnTraceEvent;
+        t.Dynamic.All += filter.OnTraceEvent;
         t.AllEvents += filter.OnTraceEvent;
         Microsoft.Diagnostics.Tracing.Parsers.Clr.ClrRundownTraceEventParser clrRundownParser = new(t);
         SampleProfilerTraceEventParser sampleProfilerParser = new(t);
@@ -120,6 +123,7 @@ public class Program
         Microsoft.Diagnostics.Tracing.Parsers.Clr.ClrRundownTraceEventParser clrRundownParser = new(t);
 
         t.Clr.All += filter.OnTraceEvent;
+        t.Dynamic.All += filter.OnTraceEvent;
         clrRundownParser.All += filter.OnTraceEvent;
         sampleProfilerParser.ThreadSample += filter.OnThreadSample;
         sampleProfilerParser.ThreadStackWalk += filter.OnThreadStackWalk;
